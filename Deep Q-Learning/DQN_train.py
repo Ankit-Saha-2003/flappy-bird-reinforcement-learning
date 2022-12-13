@@ -1,10 +1,10 @@
 import time
 import flappy_bird_gym
 from stable_baselines3 import DQN
-from stable_baselines3.common.vec_env import DummyVecEnv
 from stable_baselines3.common.evaluation import evaluate_policy
 
-env = flappy_bird_gym.make("FlappyBird-v0")
+# Load the Flappy Bird environment
+env = flappy_bird_gym.make('FlappyBird-v0')
 env.reset()
 
 # Description of environment
@@ -25,34 +25,14 @@ print(f'Result sample: {env.step(env.action_space.sample())}')
 ## res[3] = diagnostic information useful for debugging
 
 train_steps = 500000
-episodes = 10
 
-reward_per_episode = []
-timesteps_per_episode = []
-
+# Train the Deep Q-Network using a multilayer perceptron (MLP) policy
 model = DQN('MlpPolicy', env, verbose=1, tensorboard_log='Logs/')
 model.learn(total_timesteps=train_steps)
-model.save('Models/DQN_Flappy_Bird')
+model.save('Models/DQN_Flappy_Bird') # Save the trained model
 
+# Evaluate the trained model
 evaluate_policy(model, env, n_eval_episodes=3, render=True)
 
-for episode in range(episodes):
-    obs = env.reset()
-    done = False
-    score = 0
-    timesteps = 0
-
-    while not done:
-        action, states = model.predict(obs)
-        obs, reward, done, info = env.step(action)
-        score += reward
-        timesteps += 1
-        env.render()
-        time.sleep(1/30)
-
-    reward_per_episode.append(score)
-    timesteps_per_episode.append(timesteps)
-
-print(reward_per_episode)
-print(timesteps_per_episode)
+# Close the environment (Pygame window)
 env.close()
