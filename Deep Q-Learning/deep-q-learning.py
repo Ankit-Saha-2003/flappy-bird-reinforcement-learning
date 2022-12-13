@@ -1,5 +1,8 @@
 import time
 import flappy_bird_gym
+from stable_baselines3 import DQN
+from stable_baselines3.common.vec_env import DummyVecEnv
+from stable_baselines3.common.evaluation import evaluate_policy
 
 env = flappy_bird_gym.make("FlappyBird-v0")
 env.reset()
@@ -21,9 +24,17 @@ print(f'Result sample: {env.step(env.action_space.sample())}')
 ## res[2] = whether episode is completed or not
 ## res[3] = diagnostic information useful for debugging
 
-episodes = 3
+train_steps = 500000
+episodes = 10
+
 reward_per_episode = []
 timesteps_per_episode = []
+
+model = DQN('MlpPolicy', env, verbose=1, tensorboard_log='Logs/')
+model.learn(total_timesteps=train_steps)
+model.save('Models/DQN_Flappy_Bird')
+
+evaluate_policy(model, env, n_eval_episodes=3, render=True)
 
 for episode in range(episodes):
     obs = env.reset()
@@ -32,7 +43,7 @@ for episode in range(episodes):
     timesteps = 0
 
     while not done:
-        action = env.action_space.sample()
+        action, states = model.predict(obs)
         obs, reward, done, info = env.step(action)
         score += reward
         timesteps += 1
@@ -42,6 +53,6 @@ for episode in range(episodes):
     reward_per_episode.append(score)
     timesteps_per_episode.append(timesteps)
 
-env.close()
 print(reward_per_episode)
 print(timesteps_per_episode)
+env.close()
