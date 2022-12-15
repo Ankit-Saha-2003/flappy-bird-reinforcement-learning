@@ -29,10 +29,10 @@ train_steps = 500000
 # Train the Deep Q-Network using a multilayer perceptron (MLP) policy
 model = DQN('MlpPolicy', env, verbose=1, tensorboard_log='Logs/')
 model.learn(total_timesteps=train_steps)
-model.save('Models/DQN_Flappy_Bird') # Save the trained model
+model.save('Models/DQN_flappy_bird_' + str(train_steps)) # Save the trained model
 
 # Evaluate the trained model
-evaluate_policy(model, env, n_eval_episodes=3, render=True)
+print(evaluate_policy(model, env, n_eval_episodes=10, render=True))
 
 # Close the environment (Pygame window)
 env.close()

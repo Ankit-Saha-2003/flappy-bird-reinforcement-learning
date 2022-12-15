@@ -1,4 +1,5 @@
 import time
+import numpy as np
 import flappy_bird_gym
 from stable_baselines3 import DQN
 import matplotlib.pyplot as plt
@@ -7,13 +8,14 @@ import matplotlib.pyplot as plt
 env = flappy_bird_gym.make('FlappyBird-v0')
 env.reset()
 
-episodes = 10
+train_steps = 500000
+episodes = 1000
 
 reward_per_episode = []
 timesteps_per_episode = []
 
 # Load the trained Deep Q-Network
-model = DQN.load('Models/DQN_Flappy_Bird', env)
+model = DQN.load('Models/DQN_flappy_bird_' + str(train_steps), env)
 
 for episode in range(episodes):
     # Reset the observation state after the end of each episode
@@ -34,14 +36,13 @@ for episode in range(episodes):
     timesteps_per_episode.append(timesteps)
 env.close()
 
-print(reward_per_episode)
-print(timesteps_per_episode)
+print(f'Maximum reward = {np.max(reward_per_episode)}')
+print(f'Average reward = {np.mean(reward_per_episode)}')
+print(f'Standard deviation of reward = {np.std(reward_per_episode)}')
 
 plt.plot(range(1, episodes + 1), reward_per_episode)
-plt.grid()
-plt.xticks(range(1, episodes + 1))
 plt.xlabel('Episode')
 plt.ylabel('Reward')
 plt.title('Reward at each episode')
-plt.savefig('Plots/DQN_rewards.png')
+plt.savefig('Plots/DQN_rewards_' + str(train_steps) + '.png')
 plt.show()
