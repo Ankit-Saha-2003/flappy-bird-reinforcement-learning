@@ -8,8 +8,8 @@ import matplotlib.pyplot as plt
 env = flappy_bird_gym.make('FlappyBird-v0')
 env.reset()
 
-train_steps = 150000
-episodes = 100
+train_steps = 1_000_000
+episodes = 1000
 
 reward_per_episode = []
 timesteps_per_episode = []
@@ -29,8 +29,8 @@ for episode in range(episodes):
         obs, reward, done, info = env.step(action) # Perform the action and record new observations and the reward
         score += reward
         timesteps += 1
-        #env.render() # Render the game using Pygame
-        #time.sleep(1/30) # Regulate the speed (FPS) at which the game is played 
+        env.render() # Render the game using Pygame
+        time.sleep(1/30) # Regulate the speed (FPS) at which the game is played 
 
     reward_per_episode.append(score)
     timesteps_per_episode.append(timesteps)

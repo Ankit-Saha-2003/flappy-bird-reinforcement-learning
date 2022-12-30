@@ -24,7 +24,7 @@ print(f'Result sample: {env.step(env.action_space.sample())}')
 ## res[2] = whether episode is completed or not
 ## res[3] = diagnostic information useful for debugging
 
-train_steps = 150000
+train_steps = 1_000_000
 
 # Train the PPO model using a multilayer perceptron (MLP) policy
 model = PPO('MlpPolicy', env, verbose=1, tensorboard_log='Logs/')

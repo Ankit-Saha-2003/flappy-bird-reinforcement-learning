@@ -8,7 +8,7 @@ import matplotlib.pyplot as plt
 env = flappy_bird_gym.make('FlappyBird-v0')
 env.reset()
 
-train_steps = 500000
+train_steps = 500_000
 episodes = 1000
 
 reward_per_episode = []
